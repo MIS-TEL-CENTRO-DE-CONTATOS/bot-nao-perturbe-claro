@@ -26,7 +26,7 @@ def execProcesso():
 
 
 # Agendar execução
-schedule.every().day.at('15:21').do(execProcesso)
+schedule.every().day.at('15:43').do(execProcesso)
 
 
 # Produção
