@@ -4,10 +4,13 @@ import os
 import locale
 import schedule
 import time
+import dotenv
 
-ftpHost = '172.25.64.11'
-ftpUser = 'net_telematica'
-ftpPass = 'rDuFGam0S@'
+dotenv.load_dotenv(dotenv.find_dotenv())
+
+ftpHost = os.getenv('FTP_HOST')
+ftpUser = os.getenv('FTP_USER')
+ftpPass = os.getenv('FTP_PASS')
 
 # Define a localização do programa como português do Brasil
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
@@ -26,7 +29,7 @@ def execProcesso():
 
 
 # Agendar execução
-schedule.every().day.at('15:43').do(execProcesso)
+schedule.every().day.at('21:00').do(execProcesso)
 
 
 # Produção
