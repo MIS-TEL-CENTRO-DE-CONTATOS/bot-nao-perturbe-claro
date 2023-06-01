@@ -23,7 +23,7 @@ class Rpa_Ftp:
             self.ftp.chdir('/app/sftp/bloqueio')
 
             # self.filename = 'NAO_PERTURBE_20230530.zip'
-            self.filename = f'NAO_PERTURBE_{datetime.today().year}{datetime.today().month}{datetime.today().day}.zip'
+            self.filename = f'NAO_PERTURBE_{datetime.today().year}{str(datetime.today().month).zfill(2)}{datetime.today().day}.zip'
 
     def getFile(self):
         mes_str = datetime.today().strftime('%B').upper()
