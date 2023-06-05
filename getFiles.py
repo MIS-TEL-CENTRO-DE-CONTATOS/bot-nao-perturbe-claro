@@ -1,4 +1,5 @@
 from datetime import datetime
+from importFiles import importFile
 
 import pysftp
 import patoolib
@@ -23,7 +24,7 @@ class Rpa_Ftp:
             self.ftp.chdir('/app/sftp/bloqueio')
 
             # self.filename = 'NAO_PERTURBE_20230530.zip'
-            self.filename = f'NAO_PERTURBE_{datetime.today().year}{str(datetime.today().month).zfill(2)}{datetime.today().day}.zip'
+            self.filename = f'NAO_PERTURBE_{datetime.today().year}{str(datetime.today().month).zfill(2)}{str(datetime.today().day).zfill(2)}.zip'
 
     def getFile(self):
         mes_str = datetime.today().strftime('%B').upper()
@@ -52,9 +53,30 @@ class Rpa_Ftp:
         # executa o processo de captura do arquivo
         try:
             self.ftp.get(self.filename, path_blacklist_p)
+            self.ftp.close()
         except Exception as e:
             print(e)
 
-        self.ftp.close()
-
+        print(
+            f"{datetime.today().strftime('%d/%m/%Y %H:%M:%S')} - Processo de extração iniciado.")
         patoolib.extract_archive(path_blacklist_p, outdir=path_blacklist)
+
+        all_files = os.listdir(path_blacklist)
+        txt_files = [file for file in all_files if file.endswith('.txt')]
+        txt_file = txt_files[0].replace('.txt', '')
+
+        # Cria um arquivo schema para importação.
+        fileconfig = open(rf'{path_blacklist}\schema.ini', 'a')
+
+        listconfig = list()
+        listconfig.append(f'[{txt_files[0]}]\n')
+        listconfig.append('Format=Delimited(;)\n')
+        listconfig.append('CHARACTER SET=ANSI\n')
+        listconfig.append('ColNameHeader=TRUE\n')
+
+        fileconfig.writelines(listconfig)
+
+        print(txt_file)
+        importFile(txt_file)
+
+        # os.remove(rf'{path_blacklist}\{txt_file}')
