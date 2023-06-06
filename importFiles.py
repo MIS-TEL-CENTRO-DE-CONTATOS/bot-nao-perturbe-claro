@@ -24,11 +24,12 @@ class importFile:
         # print(database_con)
         engine = create_engine(database_con, echo=False)
         Session = sessionmaker(bind=engine)
+        # session = Session()
         con = engine.connect()
 
         try:
             con.execute(
-                text(f"EXEC RENTABILIZACAO_PBI.dbo.PRC_CLARO_IMPORT_DIARIO_NP '{archive}'"))
+                text(f"EXEC dbo.PRC_CLARO_IMPORT_DIARIO_NP '{archive}'"))
 
             print(
                 f"{datetime.today().strftime('%d/%m/%Y %H:%M:%S')} - Processo de importação iniciado com sucesso.")
